@@ -4,13 +4,6 @@
  */
 
 export const Colors = {
-  // Gradient colors
-  gradient: {
-    purple: '#8B5CF6',
-    blue: '#3B82F6',
-    pink: '#EC4899',
-  },
-
   // Difficulty colors
   difficulty: {
     easy: '#10B981',
@@ -43,10 +36,3 @@ export const Colors = {
   // Shadow colors
   shadow: 'rgba(0, 0, 0, 0.2)',
 } as const;
-
-// Gradient color array for background animation
-export const GRADIENT_COLORS = [
-  Colors.gradient.purple,
-  Colors.gradient.blue,
-  Colors.gradient.pink,
-] as const;

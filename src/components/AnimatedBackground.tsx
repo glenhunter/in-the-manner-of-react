@@ -1,6 +1,6 @@
 /**
  * AnimatedBackground component
- * Displays a smooth animated gradient background
+ * Displays a gradient background with subtle animation
  */
 
 import React, {useEffect, useRef} from 'react';
@@ -9,46 +9,37 @@ import LinearGradient from 'react-native-linear-gradient';
 import {GRADIENT_COLORS} from '../constants';
 
 export function AnimatedBackground() {
-  const animatedValue = useRef(new Animated.Value(0)).current;
+  const rotateValue = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     const animation = Animated.loop(
-      Animated.sequence([
-        Animated.timing(animatedValue, {
-          toValue: 1,
-          duration: 10000,
-          easing: Easing.linear,
-          useNativeDriver: false,
-        }),
-        Animated.timing(animatedValue, {
-          toValue: 0,
-          duration: 10000,
-          easing: Easing.linear,
-          useNativeDriver: false,
-        }),
-      ]),
+      Animated.timing(rotateValue, {
+        toValue: 1,
+        duration: 20000,
+        easing: Easing.linear,
+        useNativeDriver: true,
+      }),
     );
 
     animation.start();
 
     return () => animation.stop();
-  }, [animatedValue]);
+  }, [rotateValue]);
 
-  // Interpolate colors for smooth animation
-  const startColor = animatedValue.interpolate({
-    inputRange: [0, 0.5, 1],
-    outputRange: [GRADIENT_COLORS[0], GRADIENT_COLORS[1], GRADIENT_COLORS[2]],
-  });
-
-  const endColor = animatedValue.interpolate({
-    inputRange: [0, 0.5, 1],
-    outputRange: [GRADIENT_COLORS[1], GRADIENT_COLORS[2], GRADIENT_COLORS[0]],
+  // Animate a subtle rotation for visual interest
+  const rotate = rotateValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0deg', '360deg'],
   });
 
   return (
-    <Animated.View style={StyleSheet.absoluteFill}>
+    <Animated.View
+      style={[
+        StyleSheet.absoluteFill,
+        {transform: [{rotate}, {scale: 1.5}]},
+      ]}>
       <LinearGradient
-        colors={[startColor as any, endColor as any]}
+        colors={[GRADIENT_COLORS[0], GRADIENT_COLORS[1], GRADIENT_COLORS[2]]}
         style={StyleSheet.absoluteFill}
         start={{x: 0, y: 0}}
         end={{x: 1, y: 1}}

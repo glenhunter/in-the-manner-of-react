@@ -8,7 +8,7 @@ import {View, ScrollView, Text, StyleSheet, SafeAreaView} from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../data/types';
 import {NavigationHeader} from '../components/NavigationHeader';
-import {Typography, Spacing} from '../constants';
+import {Colors, Typography, Spacing} from '../constants';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Rules'>;
 

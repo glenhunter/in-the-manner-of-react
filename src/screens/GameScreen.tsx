@@ -4,7 +4,8 @@
  */
 
 import React, {useState} from 'react';
-import {View, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {RootStackParamList} from '../data/types';
@@ -13,12 +14,12 @@ import {AnimatedBackground} from '../components/AnimatedBackground';
 import {WordDisplay} from '../components/WordDisplay';
 import {StartView} from '../components/StartView';
 import {OutOfWordsView} from '../components/OutOfWordsView';
-import {CircularButton} from '../components/CircularButton';
-import {Colors} from '../constants';
+import {Colors, Typography, Spacing} from '../constants';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Game'>;
 
 export function GameScreen({navigation}: Props) {
+  const insets = useSafeAreaInsets();
   const {
     currentWord,
     currentDifficulty,
@@ -62,6 +63,29 @@ export function GameScreen({navigation}: Props) {
     <View style={styles.container}>
       <AnimatedBackground />
 
+      {/* Header */}
+      <View style={[styles.header, {paddingTop: insets.top + Spacing.sm}]}>
+        <Text style={styles.headerTitle}>In the Manner Of</Text>
+        <View style={styles.headerButtons}>
+          {currentWord && !outOfWords && (
+            <TouchableOpacity
+              style={styles.headerButton}
+              onPress={handleRefresh}>
+              <Icon name="refresh" size={24} color={Colors.text.secondary} />
+            </TouchableOpacity>
+          )}
+          <TouchableOpacity
+            style={styles.headerButton}
+            onPress={handleSettings}>
+            <Icon
+              name="settings-outline"
+              size={24}
+              color={Colors.text.secondary}
+            />
+          </TouchableOpacity>
+        </View>
+      </View>
+
       {/* Content Area */}
       <View style={styles.content}>
         {outOfWords ? (
@@ -76,24 +100,6 @@ export function GameScreen({navigation}: Props) {
           <StartView onNewGame={handleNewGame} onHowToPlay={handleHowToPlay} />
         )}
       </View>
-
-      {/* Settings Button (top-right) */}
-      <TouchableOpacity style={styles.settingsButton} onPress={handleSettings}>
-        <Icon
-          name="settings-outline"
-          size={28}
-          color={Colors.text.tertiary}
-        />
-      </TouchableOpacity>
-
-      {/* Refresh Button (bottom-right, conditional) */}
-      {currentWord && !outOfWords && (
-        <CircularButton
-          icon="refresh"
-          onPress={handleRefresh}
-          style={styles.refreshButton}
-        />
-      )}
     </View>
   );
 }
@@ -102,20 +108,29 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: Spacing.lg,
+    paddingBottom: Spacing.sm,
+  },
+  headerTitle: {
+    fontSize: Typography.fontSize.medium,
+    fontWeight: Typography.fontWeight.semibold,
+    color: Colors.text.primary,
+  },
+  headerButtons: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.sm,
+  },
+  headerButton: {
+    padding: Spacing.xs,
+  },
   content: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  settingsButton: {
-    position: 'absolute',
-    top: 60,
-    right: 20,
-    padding: 20,
-  },
-  refreshButton: {
-    position: 'absolute',
-    bottom: 30,
-    right: 30,
   },
 });
